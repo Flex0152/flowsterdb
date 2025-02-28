@@ -33,6 +33,7 @@ class FlowsterDB(tk.Tk):
 
         self.search_field = Entry(self.frame)
         self.search_field.grid(row=1, column=0, padx=5, pady=5, sticky="ew")
+        self.search_field.bind("<Return>", self.on_enter)
 
         self.category = Combobox(self.frame)
         self.category['values'] = ('Employees', 'Distributor', 'ProjectDataroom', 'SharedMailbox')
@@ -62,6 +63,9 @@ class FlowsterDB(tk.Tk):
 
         # Damit die X-Scrollbar mitwächst
         self.frame.rowconfigure(4, weight=0) 
+
+    def on_enter(self, event):
+        self.btn_search()
 
     def btn_search(self):
         self.result_field.delete('1.0', tk.END)
