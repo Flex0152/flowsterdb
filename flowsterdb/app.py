@@ -4,6 +4,24 @@ from tkinter import Text
 from datatools import en, get_employee_by_samaccountname, get_object_by_name
 
 
+class SettingsWindow(tk.Toplevel):
+    def __init__(self, master):
+        super().__init__(master)
+        self.title("Einstellungen")
+        self.geometry("300x200")
+
+        self.rowconfigure(0, weight=1)
+        self.columnconfigure(0, weight=1)
+
+        self.db_label = Label(self, text="Datenbankadresse:")
+        self.db_label.grid(row=0, column=0, sticky="ew")
+        self.db_name_input = Entry(self)
+        self.db_name_input.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
+
+        self.settings_save_btn = Button(self, text="Speichern", command=self.destroy)
+        self.settings_save_btn.grid(row=1, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
+
+
 class FlowsterDB(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -12,6 +30,7 @@ class FlowsterDB(tk.Tk):
         screen_width = self.winfo_screenwidth()
         screen_height = self.winfo_screenheight()
         self.geometry(f"{int(screen_width * 0.6)}x{int(screen_height * 0.6)}")  # 60% der Bildschirmgröße
+        self.settings_window = None # Kontrollvar. für das Einstellungsfenster
 
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
@@ -63,6 +82,15 @@ class FlowsterDB(tk.Tk):
 
         # Damit die X-Scrollbar mitwächst
         self.frame.rowconfigure(4, weight=0) 
+
+        self.settings_btn = Button(self.frame, text='Einstellungen', command=self.open_settings)
+        # Row 99 soll immer die letzte Zeile des Fensters symbolisieren. 
+        self.settings_btn.grid(row=99, column=0, columnspan=3, padx=5, pady=5, sticky="ew")
+
+    def open_settings(self):
+        """Öffnet das Einstellungsfenster, falls es nicht bereits existiert."""
+        if self.settings_window is None or not self.settings_window.winfo_exists():
+            self.settings_window = SettingsWindow(self)
 
     def on_enter(self, event):
         self.btn_search()
