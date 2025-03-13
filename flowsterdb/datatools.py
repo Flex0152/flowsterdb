@@ -17,9 +17,17 @@ def get_object_by_name(en: Engine, category: str, name: str) -> pd.DataFrame:
 
 def get_employee_by_samaccountname(en: Engine, samaccountname: str) -> pd.DataFrame:
     with en.connect() as con:
-        query = f"""
-        SELECT * FROM tblEmployees WHERE SamAccountname like '%{samaccountname}%'
-        """
-        result = pd.read_sql(query, con)
+        query = sa.text(f"""
+        SELECT * FROM tblEmployees WHERE SamAccountname like :name
+        """)
+        params = {'name': f"'%{samaccountname}%'"}
+        try:
+            result = pd.read_sql(query, con=con, params=params)
+        except sa.exc.OperationalError as e:
+            raise e
         return result
+
+
+if __name__ == '__main__':
+    print(get_employee_by_samaccountname(en, 'felix.weidemann'))
 

@@ -1,1 +1,2 @@
 *.db
+flowsterdb/__pycache__/
