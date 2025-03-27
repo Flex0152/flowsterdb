@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter.ttk import Label, Entry, Button, Combobox
+from tkinter.ttk import Label, Entry, Button, Combobox, Frame
 from tkinter import Text
 from datatools import en, get_employee_by_samaccountname, get_object_by_name
 
@@ -13,12 +13,19 @@ class SettingsWindow(tk.Toplevel):
         self.rowconfigure(0, weight=1)
         self.columnconfigure(0, weight=1)
 
-        self.db_label = Label(self, text="Datenbankadresse:")
+        self.frame = Frame(self)
+        self.frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
+        for i in range(2):
+            self.frame.rowconfigure(i, weight=1)
+            self.frame.columnconfigure(i, weight=1)
+
+        self.db_label = Label(self.frame, text="Datenbankadresse:")
         self.db_label.grid(row=0, column=0, sticky="ew")
-        self.db_name_input = Entry(self)
+        self.db_name_input = Entry(self.frame)
         self.db_name_input.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
 
-        self.settings_save_btn = Button(self, text="Speichern", command=self.destroy)
+        self.settings_save_btn = Button(self.frame, text="Speichern", command=self.destroy)
         self.settings_save_btn.grid(row=1, column=0, columnspan=2, padx=5, pady=5, sticky="ew")
 
 
